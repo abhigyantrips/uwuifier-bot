@@ -28,7 +28,7 @@ client.on('message', async (msg) => {
 	if (msg.author.bot || !servers.map(i => i.serverChannel).includes(msg.channel.id) || msg.type !== 'DEFAULT') return;
 	
 	for (let server of servers) {
-		if (server.serverChannel === message.channel.id) {
+		if (server.serverChannel === msg.channel.id) {
 			await server.serverWebhook.send(uwuifier.uwuifySentence(msg.content), {
 				username: msg.author.username,
 				avatarURL: msg.author.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
