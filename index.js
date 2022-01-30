@@ -20,7 +20,7 @@ client.on('ready', async () => {
 	const parzchannel = client.channels.cache.get(parzchat);
 	const parzwebhooks = await parzchannel.fetchWebhooks();
 	parzhook = parzwebhooks.find(hook => hook.name === 'UwUifier');
-	if (!parzhook) parzhook = await channel.createWebhook('UwUifier');
+	if (!parzhook) parzhook = await parzchannel.createWebhook('UwUifier');
 });
 
 client.on('message', async (msg) => {
