@@ -12,6 +12,8 @@ let parzhook;
 client.on('ready', async () => {
 	console.log('Ready.');
 
+	client.user.setStatus('invisible');
+
 	const channel = client.channels.cache.get(uwuchat);
 	const webhooks = await channel.fetchWebhooks();
 	uwuhook = webhooks.find(hook => hook.name === 'UwUifier');
