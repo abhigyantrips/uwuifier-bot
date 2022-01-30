@@ -1,0 +1,24 @@
+{
+  "name": "uwuifier-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhigyantrips/uwuifier-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abhigyantrips/uwuifier-bot/issues"
+  },
+  "homepage": "https://github.com/abhigyantrips/uwuifier-bot#readme",
+  "dependencies": {
+    "discord.js": "^12.5.3",
+    "uwuifier": "^4.0.4"
+  }
+}
