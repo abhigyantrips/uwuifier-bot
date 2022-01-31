@@ -1,42 +1,72 @@
-const Discord = require('discord.js');
-const Uwuifier = require('uwuifier');
+const Discord = require("discord.js");
+const Uwuifier = require("uwuifier");
 
-const client = new Discord.Client();
+const client = new Discord.Client({
+	intents: 32767,
+});
 const uwuifier = new Uwuifier();
 
 const servers = [
-	{serverName: 'Butternaan', serverChannel: '937231078408732772', serverWebhook: null},
-	{serverName: 'Parzival', serverChannel: '931033409831182377', serverWebhook: null}
+	{serverName: "Butternaan", serverChannel: "937231078408732772", serverWebhook: null},
 ];
 
-client.on('ready', async () => {
+client.on("ready", async () => {
 
-	client.user.setStatus('invisible');
+	client.user.setStatus("invisible");
 
 	for (let server of servers) {
-		const channel = client.channels.cache.get(server.serverChannel);
+		const channel = await client.channels.fetch(server.serverChannel);
+		
+		if (channel === undefined) {
+			console.log(`Cannot access ${server.serverName}"s channel (${server.serverChannel}).`)	
+		}
+
 		const webhooks = await channel.fetchWebhooks();
-		server.serverWebhook = webhooks.find(hook => hook.name === 'UwU-ifier');
-		if (!server.serverWebhook) server.serverWebhook = await channel.createWebhook('UwU-ifier');
+		server.serverWebhook = webhooks.find(hook => hook.name === "UwU-ifier");
+		if (!server.serverWebhook) server.serverWebhook = await channel.createWebhook("UwU-ifier");
 	};
 
-	console.log('The bot is ready.');
+	console.log("The bot is ready.");
 });
 
-client.on('message', async (msg) => {
+client.on("messageCreate", async (message) => {
 
-	if (msg.author.bot || !servers.map(i => i.serverChannel).includes(msg.channel.id) || msg.type !== 'DEFAULT') return;
+	if (message.author.bot || !servers.map(i => i.serverChannel).includes(message.channel.id) || message.type !== "DEFAULT") return;
 	
 	for (let server of servers) {
-		if (server.serverChannel === msg.channel.id) {
-			await server.serverWebhook.send(uwuifier.uwuifySentence(msg.content), {
-				username: msg.author.username,
-				avatarURL: msg.author.avatarURL({ format: 'png', dynamic: true, size: 1024 }),
-				disableMentions: 'everyone',
-				files: msg.attachments.map(i => i.url)
+		if (server.serverChannel === message.channel.id) {
+			await server.serverWebhook.send({
+				content: uwuifier.uwuifySentence(message.content),
+				username: message.author.username,
+				avatarURL: message.author.avatarURL(),
+				disableMentions: "everyone",
 			});
-			await msg.delete();
+			await message.delete();
 			return;
+		};
+	};
+
+});
+
+client.on("messageCreate", async (message) => {
+
+	if (message.author.bot || !servers.map(i => i.serverChannel).includes(message.channel.id) || message.type !== "REPLY") return;
+	
+	for (let server of servers) {
+		if (server.serverChannel === message.channel.id) {
+			const reference = await message.fetchReference()
+			embed = new Discord.MessageEmbed()
+				.setColor("#303136")
+				.setAuthor({ name: reference.author.username, iconURL: reference.author.avatarURL(), url: reference.url })
+				.setDescription(reference.content)
+			await server.serverWebhook.send({
+				content: uwuifier.uwuifySentence(message.content),
+				username: message.author.username,
+				avatarURL: message.author.avatarURL(),
+				disableMentions: "everyone",
+				embeds: [embed],
+			});
+			await message.delete();
 		};
 	};
 
