@@ -52,7 +52,7 @@ client.on("messageCreate", async (message) => {
 					username: message.author.username,
 					avatarURL: message.author.avatarURL(),
 					disableMentions: "everyone",
-					files: message.reference ? null : message.attachments.map(file => file.url),
+					files: message.reference ? null : message.attachments.slice(0, 3).map(file => file.url),
 					embeds: embed ? [embed].concat(attachments) : [],
 				});
 				await message.delete();
